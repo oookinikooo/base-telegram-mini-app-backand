@@ -12,8 +12,19 @@ from fastapi.exceptions import HTTPException
 from fastapi.security import HTTPBearer
 from jose import JWTError, jwt
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "https://dev-app-87355.firebaseapp.com/"],  # Your Vite dev server
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+
 oauth2_schema = HTTPBearer()
 
 class InitDataRequest(BaseModel):
