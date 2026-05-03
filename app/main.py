@@ -18,7 +18,8 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://dev-app-87355.firebaseapp.com/"],  # Your Vite dev server
+    # allow_origins=["http://localhost:5173", "https://dev-app-87355.firebaseapp.com/"],  # Your Vite dev server
+    allow_origins=['*'],  # Your Vite dev server
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
@@ -109,11 +110,18 @@ async def get_current_user(token: str = Depends(oauth2_schema)):
     except JWTError:
         raise HTTPException(status_code=403, detail="Invalid Telegram auth")
 
+
 @app.get("/api/user/data")
 async def get_user_data(current_user: dict = Depends(get_current_user)):
     return {"data": f"Hello {current_user['user_id']}"}
 
 
+@app.get("/api/user/test")
+async def get_user_test_data():
+    print("yes, get it")
+    return {"data": "Hello"}
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=4444, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
